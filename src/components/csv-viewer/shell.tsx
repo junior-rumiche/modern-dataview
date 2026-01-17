@@ -5,7 +5,7 @@ import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import { FileDropzone } from "./file-dropzone";
 import { Button } from "@/components/ui/button";
-import { Loader2, Trash2, ArrowUpDown, FileSpreadsheet, LayoutPanelLeft, MoreVertical, Search, Settings2, BarChart3, PanelRightClose, PanelRightOpen, Download, HelpCircle } from "lucide-react";
+import { Loader2, Trash2, ArrowUpDown, FileSpreadsheet, LayoutPanelLeft, MoreVertical, Search, Settings2, BarChart3, PanelRightClose, PanelRightOpen, Download } from "lucide-react";
 import { DataTable } from "./data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,8 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { analyzeColumn, ColumnStats } from "@/lib/analytics";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { toast } from "sonner";
-import { driver } from "driver.js";
-import "driver.js/dist/driver.css";
 
 interface ViewerShellProps { }
 
@@ -64,12 +62,6 @@ export function ViewerShell({ }: ViewerShellProps) {
         if (savedShowStats !== null) {
             setShowStats(savedShowStats === "true");
         }
-
-        // Check and start tour
-        const hasSeenTour = localStorage.getItem("modern_csv_has_seen_tour");
-        if (!hasSeenTour && savedData) {
-            setTimeout(() => startTour(), 1000);
-        }
     }, []);
 
     const toggleStats = useCallback(() => {
@@ -78,23 +70,7 @@ export function ViewerShell({ }: ViewerShellProps) {
         localStorage.setItem("modern_csv_show_stats", String(newState));
     }, [showStats]);
 
-    const startTour = () => {
-        const driverObj = driver({
-            showProgress: true,
-            animate: true,
-            steps: [
-                { popover: { title: 'Welcome to Modern DataView! 👋', description: 'This is your new power-tool for data manipulation. Let me show you around.' } },
-                { element: '#table-search', popover: { title: 'Global Search', description: 'Instantly filter across all columns as you type.' } },
-                { element: '#table-columns', popover: { title: 'Column Tools', description: 'Hide or show specific cols to focus on what matters.' } },
-                { element: '#tool-dedup', popover: { title: 'Smart Cleanup', description: 'One-click deduplication to remove exact repeating rows.' } },
-                { element: '#tool-view-mode', popover: { title: 'Data Views', description: 'Toggle between the rich Table view and raw JSON mode.' } },
-                { element: '#sidebar-toggle', popover: { title: 'Data Insights', description: 'Expand this panel to see auto-generated charts and stats for every column.' } },
-                { popover: { title: 'You\'re all set! 🚀', description: 'Start exploring your data now. You can replay this tour anytime from the toolbar.' } }
-            ]
-        });
-        driverObj.drive();
-        localStorage.setItem("modern_csv_has_seen_tour", "true");
-    };
+
 
     const saveToStorage = (data: any[], cols: string[], name: string) => {
         try {
@@ -469,15 +445,7 @@ export function ViewerShell({ }: ViewerShellProps) {
                                             </Button>
                                         </div>
 
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-9 w-9 text-muted-foreground hover:text-primary"
-                                            onClick={startTour}
-                                            title="Start Tour"
-                                        >
-                                            <HelpCircle className="w-4 h-4" />
-                                        </Button>
+
                                         <Button variant="outline" size="icon" className="h-9 w-9" onClick={resetViewer}>
                                             <Trash2 className="w-4 h-4 text-destructive" />
                                         </Button>
