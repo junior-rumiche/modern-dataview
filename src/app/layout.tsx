@@ -16,6 +16,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://modern-dataview.vercel.app'),
   title: "Modern DataView | The Fastest Online CSV & Excel Viewer",
   description: "Open, view, and analyze large CSV and Excel files instantly in your browser. 100% Private, no server uploads. The best tool for data analysis.",
   keywords: [
@@ -24,6 +25,9 @@ export const metadata: Metadata = {
     "Filter CSV Online", "No Upload CSV Viewer", "Secure Data Analysis",
     "JSON Viewer", "Big Data", "Google Sheets alternative"
   ],
+  verification: {
+    google: "0vDxt0U570AAai5uQjBWLTmgrNOM_5RQn8NVDq3ZcIE",
+  },
 };
 
 export default function RootLayout({
