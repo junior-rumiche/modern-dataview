@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileSpreadsheet, Zap, Shield, Sparkles, Database, BarChart3, Lock, CheckCircle2, ChevronRight, Laptop } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from "framer-motion";
+import { MouseEvent, useRef } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { AccordionItem } from "@/components/ui/accordion-item";
 
@@ -62,10 +63,27 @@ export default function LandingPage() {
       <main className="flex-1 pt-16">
         {/* Hero Section */}
         <section className="relative w-full py-24 md:py-32 lg:py-40 overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
-          {/* Background Grids */}
+          {/* Background Grids & Aurora */}
           <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-          <div className="absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-[100px] opacity-40 dark:opacity-20 pointer-events-none" aria-hidden="true">
-            <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-purple-500 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2 }}
+              className="absolute top-[-10%] left-[20%] w-[40rem] h-[40rem] bg-primary/20 rounded-full blur-[128px] mix-blend-screen opacity-50 dark:opacity-20 animate-blob"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, delay: 0.5 }}
+              className="absolute top-[10%] right-[20%] w-[30rem] h-[30rem] bg-purple-500/20 rounded-full blur-[128px] mix-blend-screen opacity-50 dark:opacity-20 animate-blob animation-delay-2000"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, delay: 1 }}
+              className="absolute -bottom-[20%] left-[30%] w-[50rem] h-[50rem] bg-indigo-500/20 rounded-full blur-[128px] mix-blend-screen opacity-50 dark:opacity-20 animate-blob animation-delay-4000"
+            />
           </div>
 
           <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col items-center text-center max-w-5xl">
@@ -112,34 +130,10 @@ export default function LandingPage() {
               </Link>
             </motion.div>
 
-            {/* Hero Dashboard Preview */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 40 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
-              className="mt-20 w-full relative"
-            >
-              <div className="absolute -inset-1 rounded-[1.5rem] bg-gradient-to-r from-primary to-purple-600 opacity-30 blur-2xl" />
-              <div className="relative rounded-2xl border bg-background/50 p-2 backdrop-blur-sm shadow-2xl overflow-hidden ring-1 ring-white/10">
-                <div className="rounded-xl border bg-card/90 aspect-[16/9] flex items-center justify-center relative overflow-hidden group">
-                  {/* Abstract UI representation */}
-                  <div className="w-full h-full p-6 flex flex-col gap-4">
-                    <div className="h-8 w-1/3 bg-muted rounded-md animate-pulse" />
-                    <div className="flex-1 w-full bg-muted/20 rounded-lg border grid grid-cols-4 gap-4 p-4 overflow-hidden">
-                      {[...Array(16)].map((_, i) => (
-                        <div key={i} className="h-4 bg-muted/40 rounded animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center bg-background/10 backdrop-blur-[1px]">
-                    <div className="bg-background/90 p-6 rounded-2xl border shadow-xl flex flex-col items-center">
-                      <FileSpreadsheet className="w-12 h-12 text-primary mb-3" />
-                      <span className="font-semibold">Drag & Drop Ready</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            {/* Hero Dashboard Preview with 3D Tilt & Spotlight */}
+            <div className="mt-24 w-full relative sm:px-8 perspective-1000">
+              <DashboardPreview />
+            </div>
           </div>
         </section>
 
@@ -153,27 +147,9 @@ export default function LandingPage() {
               <p className="text-xl text-muted-foreground">Everything you need to analyze large datasets without slowing down your browser.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
               {features.map((feature, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className={`group relative overflow-hidden rounded-3xl border p-8 hover:shadow-lg transition-all duration-300 ${feature.className}`}
-                >
-                  <div className="absolute top-0 right-0 p-24 bg-gradient-to-br from-foreground/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700" />
-                  <div className="relative z-10 h-full flex flex-col justify-between">
-                    <div className="mb-6 inline-flex p-3 rounded-2xl bg-background border shadow-sm w-fit group-hover:scale-110 transition-transform">
-                      <feature.icon className="h-6 w-6 text-foreground" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </div>
-                  </div>
-                </motion.div>
+                <FeatureCard key={i} feature={feature} index={i} />
               ))}
             </div>
           </div>
@@ -312,5 +288,145 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function DashboardPreview() {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
+  const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const xPct = (clientX - left) / width - 0.5;
+    const yPct = (clientY - top) / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, scale: 0.9, y: 40, rotateX: 45 }}
+      animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+      transition={{ duration: 1.2, type: "spring", bounce: 0.2 }}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      className="relative w-full aspect-[16/9] rounded-[2rem] border bg-background/50 backdrop-blur-sm shadow-2xl overflow-hidden group perspective-1000"
+    >
+      <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-primary/5 -z-10 group-hover:opacity-75 transition-opacity duration-500" />
+
+      {/* Glow Effect with Motion Template */}
+      <motion.div
+        style={{
+          background: useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.1), transparent 80%)`,
+        }}
+        className="absolute inset-0 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+      />
+
+      {/* Content */}
+      <div className="absolute inset-2 md:inset-4 rounded-2xl bg-card/90 border shadow-inner flex flex-col overflow-hidden transform-style-3d">
+        {/* Mock Header */}
+        <div className="h-12 border-b bg-muted/20 flex items-center px-4 gap-2 shrink-0">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-red-400/50" />
+            <div className="w-3 h-3 rounded-full bg-yellow-400/50" />
+            <div className="w-3 h-3 rounded-full bg-green-400/50" />
+          </div>
+          <div className="ml-4 h-6 w-32 bg-muted rounded-md opacity-20" />
+          <div className="ml-auto h-8 w-8 rounded-full bg-primary/10" />
+        </div>
+        {/* Mock Body */}
+        <div className="flex-1 p-6 grid grid-cols-4 gap-6">
+          {/* Sidebar */}
+          <div className="hidden md:block col-span-1 space-y-3">
+            <div className="h-8 w-3/4 bg-primary/20 rounded mb-4" />
+            <div className="h-4 w-full bg-muted/10 rounded" />
+            <div className="h-4 w-5/6 bg-muted/10 rounded" />
+            <div className="h-4 w-4/6 bg-muted/10 rounded" />
+          </div>
+          {/* Table */}
+          <div className="col-span-4 md:col-span-3 space-y-4">
+            <div className="h-10 w-full bg-muted/5 rounded-lg flex gap-4 p-2 border border-dashed border-border/50">
+              <div className="w-1/4 h-full bg-muted/20 rounded" />
+              <div className="w-1/4 h-full bg-muted/20 rounded" />
+              <div className="w-1/4 h-full bg-muted/20 rounded" />
+              <div className="w-1/4 h-full bg-muted/20 rounded" />
+            </div>
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="h-10 w-full bg-background/50 border rounded-lg flex gap-4 p-2 items-center">
+                <div className="w-4 h-4 rounded bg-primary/20 shrink-0" />
+                <div className="flex-1 h-2 bg-muted/20 rounded" />
+                <div className="w-1/6 h-2 bg-muted/20 rounded" />
+                <div className="w-1/6 h-2 bg-muted/20 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function FeatureCard({ feature, index }: { feature: any, index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    x.set(clientX - left);
+    y.set(clientY - top);
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      viewport={{ once: true }}
+      className={`group relative overflow-hidden rounded-3xl border bg-card/50 hover:bg-card/80 transition-colors duration-300 ${feature.className}`}
+    >
+      <div className="absolute inset-0 z-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%)`
+        }}
+      >
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: useMotionTemplate`radial-gradient(600px circle at ${x}px ${y}px, rgba(255,255,255,0.06), transparent 40%)`
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+        <div className="mb-6 inline-flex p-3 rounded-2xl bg-background/80 border shadow-sm w-fit group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+          <feature.icon className="h-6 w-6 text-foreground" />
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
+          <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+        </div>
+      </div>
+    </motion.div>
   );
 }
