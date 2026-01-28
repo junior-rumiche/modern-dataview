@@ -20,10 +20,10 @@ export const metadata: Metadata = {
   title: "Modern DataView | The Fastest Online CSV & Excel Viewer",
   description: "Open, view, and analyze large CSV and Excel files instantly in your browser. 100% Private, no server uploads. The best tool for data analysis.",
   keywords: [
-    "CSV Viewer", "Excel Viewer", "Online CSV Editor", "Free Online Excel Viewer",
-    "CSV to Excel Converter", "Data Analysis Tool", "Large CSV Viewer",
-    "Filter CSV Online", "No Upload CSV Viewer", "Secure Data Analysis",
-    "JSON Viewer", "Big Data", "Google Sheets alternative"
+    "Online CSV Viewer", "Excel Viewer Online", "Free CSV Editor", "Open CSV File",
+    "Large CSV Viewer", "XLSX Viewer", "Secure CSV Viewer", "Browser-based Spreadsheet Viewer",
+    "CSV to Excel Converter", "Filter CSV Data", "No Upload Data Viewer", "Fast CSV Parser",
+    "Google Sheets alternative", "View Large Excel Files", "Private Data Analysis"
   ],
   verification: {
     google: "0vDxt0U570AAai5uQjBWLTmgrNOM_5RQn8NVDq3ZcIE",
